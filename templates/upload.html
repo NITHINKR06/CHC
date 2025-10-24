@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Upload File - CHC Secure Cloud Storage{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-cloud-upload-fill"></i> Upload & Encrypt File
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <!-- Owner Name -->
+                    <div class="mb-4">
+                        <label for="owner_name" class="form-label fw-bold">
+                            <i class="bi bi-person-fill"></i> Owner Name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="owner_name" 
+                               name="owner_name" 
+                               placeholder="Enter your name (e.g., Nithin)"
+                               required>
+                        <small class="form-text text-muted">
+                            This will be used to generate your unique encryption key
+                        </small>
+                    </div>
+
+                    <!-- File Selection -->
+                    <div class="mb-4">
+                        <label for="file" class="form-label fw-bold">
+                            <i class="bi bi-file-earmark-arrow-up"></i> Select File
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="file" 
+                               class="form-control form-control-lg" 
+                               id="file" 
+                               name="file"
+                               required>
+                        <small class="form-text text-muted">
+                            Maximum file size: 16 MB. All file types are supported.
+                        </small>
+                    </div>
+
+                    <!-- Authorized Users -->
+                    <div class="mb-4">
+                        <label for="authorized_users" class="form-label fw-bold">
+                            <i class="bi bi-people-fill"></i> Authorized Users
+                            <span class="text-muted">(Optional)</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="authorized_users" 
+                               name="authorized_users"
+                               placeholder="Enter names separated by commas (e.g., Srijan, Alice, Bob)">
+                        <small class="form-text text-muted">
+                            These users will be able to decrypt the file. Leave empty for owner-only access.
+                        </small>
+                    </div>
+
+                    <!-- Info Alert -->
+                    <div class="alert alert-info border-0 mb-4">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-info-circle-fill"></i> How Encryption Works
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>A new blockchain block will be created for this upload</li>
+                            <li>Unique encryption seed will be derived from blockchain context</li>
+                            <li>File will be encrypted using CHC algorithm</li>
+                            <li>Each authorized user will get a wrapped seed for decryption</li>
+                        </ul>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                            <i class="bi bi-lock-fill"></i> Encrypt & Upload
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Encryption Process Card -->
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-shield-lock"></i> Encryption Process</h5>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="d-flex mb-3">
+                        <div class="badge bg-primary rounded-circle p-2 me-3">1</div>
+                        <div>
+                            <h6 class="mb-1">File Upload</h6>
+                            <small class="text-muted">Your file is received by the server</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="badge bg-primary rounded-circle p-2 me-3">2</div>
+                        <div>
+                            <h6 class="mb-1">Blockchain Record</h6>
+                            <small class="text-muted">New block created with file metadata</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="badge bg-primary rounded-circle p-2 me-3">3</div>
+                        <div>
+                            <h6 class="mb-1">Seed Generation</h6>
+                            <small class="text-muted">Unique seed derived from owner secret + blockchain context</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="badge bg-primary rounded-circle p-2 me-3">4</div>
+                        <div>
+                            <h6 class="mb-1">CHC Encryption</h6>
+                            <small class="text-muted">File encrypted using contextual hash chain algorithm</small>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="badge bg-primary rounded-circle p-2 me-3">5</div>
+                        <div>
+                            <h6 class="mb-1">Secure Storage</h6>
+                            <small class="text-muted">Encrypted file saved with wrapped seeds for authorized users</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // File upload form validation and feedback
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Encrypting...';
+        
+        // Re-enable after a timeout (in case of error)
+        setTimeout(function() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }, 30000);
+    });
+
+    // File size validation
+    document.getElementById('file').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const maxSize = 16 * 1024 * 1024; // 16MB
+        
+        if (file && file.size > maxSize) {
+            alert('File size exceeds 16MB limit. Please choose a smaller file.');
+            e.target.value = '';
+        }
+    });
+</script>
+{% endblock %}

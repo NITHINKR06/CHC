@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Home - CHC Secure Cloud Storage{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-body p-5 text-center">
+                <h2 class="display-5 fw-bold text-primary mb-3">
+                    <i class="bi bi-shield-lock-fill"></i> Welcome to CHC Cloud Storage
+                </h2>
+                <p class="lead text-muted">
+                    Secure your files with blockchain-linked contextual encryption
+                </p>
+                <hr class="my-4">
+                <p class="mb-4">
+                    Each file is encrypted with a unique key derived from blockchain context, 
+                    ensuring maximum security and controlled access.
+                </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-cloud-upload"></i> Upload File
+                    </a>
+                    <a href="{{ url_for('files') }}" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="bi bi-folder2-open"></i> View Files
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 p-3 d-inline-block">
+                            <i class="bi bi-lock-fill fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Contextual Encryption</h5>
+                        <p class="card-text text-muted">
+                            Each file is encrypted with a unique seed derived from blockchain hash, 
+                            timestamp, and file ID using the CHC algorithm.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 p-3 d-inline-block">
+                            <i class="bi bi-diagram-3-fill fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Blockchain Integration</h5>
+                        <p class="card-text text-muted">
+                            Every upload creates an immutable blockchain record, providing 
+                            context for encryption and an audit trail.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="feature-icon bg-warning bg-gradient text-white rounded-3 mb-3 p-3 d-inline-block">
+                            <i class="bi bi-people-fill fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Access Control</h5>
+                        <p class="card-text text-muted">
+                            Specify authorized users during upload. Only they can decrypt 
+                            files using their unique wrapped seeds.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3 p-3 d-inline-block">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Forward Security</h5>
+                        <p class="card-text text-muted">
+                            CHC algorithm provides forward security through state chaining, 
+                            making each block's encryption dependent on previous ciphertext.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-gear-fill"></i> Secure File Management Flow</h5>
+            </div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">1. File Upload</div>
+                            The Uploader uploads a file to the system, entering the Off-Chain Process for encryption and storage.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">2. Off-Chain Encryption & Storage</div>
+                            System derives seed using block hash, timestamp, and file ID. CHC Encryption module encrypts the file, which is stored off-chain.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">2</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">3. On-Chain Logging</div>
+                            Blockchain Network records Block Hash, Access Log, and Metadata for immutability and auditability.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">3</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">4. File Access & Retrieval</div>
+                            System retrieves metadata from blockchain and ciphertext from off-chain storage when user requests access.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">4</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">5. Authorized User Access</div>
+                            Authorized users use their private key to derive the same seed and successfully decrypt the file.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">5</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">6. Unauthorized User Prevention</div>
+                            Unauthorized users cannot derive the correct seed, causing decryption to fail and access to be denied.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">6</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">7. Security Outcome</div>
+                            Data confidentiality and integrity are maintained. All file uploads and accesses are cryptographically verifiable via blockchain.
+                        </div>
+                        <span class="badge bg-primary rounded-pill">7</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Technical Details -->
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-code-slash"></i> Technical Implementation</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Encryption Algorithm</h6>
+                        <ul class="small text-muted">
+                            <li>CHC (Contextual Hash Chain)</li>
+                            <li>HMAC-SHA256 for key derivation</li>
+                            <li>Block-wise XOR encryption</li>
+                            <li>State chaining for forward security</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Technology Stack</h6>
+                        <ul class="small text-muted">
+                            <li>Python 3 + Flask Backend</li>
+                            <li>Bootstrap 5 Frontend</li>
+                            <li>JSON-based Blockchain</li>
+                            <li>Cryptography Library</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

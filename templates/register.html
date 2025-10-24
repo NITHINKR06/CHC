@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Register - CHC Secure Cloud Storage{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white text-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-plus-fill"></i> Create Account
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" id="registerForm">
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-bold">
+                            <i class="bi bi-person-fill"></i> Username
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="username" 
+                               name="username"
+                               placeholder="Choose a unique username"
+                               pattern="[a-zA-Z0-9_]{3,20}"
+                               title="3-20 characters, letters, numbers, and underscore only"
+                               required>
+                        <small class="form-text text-muted">
+                            3-20 characters, letters, numbers, and underscore only
+                        </small>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold">
+                            <i class="bi bi-envelope-fill"></i> Email Address
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="email" 
+                               class="form-control form-control-lg" 
+                               id="email" 
+                               name="email"
+                               placeholder="your.email@example.com"
+                               required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-bold">
+                            <i class="bi bi-key-fill"></i> Password
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" 
+                               class="form-control form-control-lg" 
+                               id="password" 
+                               name="password"
+                               placeholder="Choose a strong password"
+                               minlength="6"
+                               required>
+                        <small class="form-text text-muted">
+                            Minimum 6 characters
+                        </small>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label fw-bold">
+                            <i class="bi bi-key-fill"></i> Confirm Password
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" 
+                               class="form-control form-control-lg" 
+                               id="confirm_password" 
+                               name="confirm_password"
+                               placeholder="Re-enter your password"
+                               minlength="6"
+                               required>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the terms and conditions
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-person-plus"></i> Create Account
+                        </button>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Login
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Account Benefits -->
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body">
+                <h6 class="text-success">
+                    <i class="bi bi-check-circle"></i> Account Benefits
+                </h6>
+                <ul class="small mb-0">
+                    <li>Secure file encryption with personal keys</li>
+                    <li>Share files with other users</li>
+                    <li>Track your uploaded files</li>
+                    <li>Access control management</li>
+                    <li>Blockchain audit trail</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return false;
+        }
+        
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating Account...';
+        
+        // Submit form
+        this.submit();
+    });
+</script>
+{% endblock %}

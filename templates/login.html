@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Login - CHC Secure Cloud Storage{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-lock"></i> User Login
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" id="loginForm">
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-bold">
+                            <i class="bi bi-person-fill"></i> Username
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="username" 
+                               name="username"
+                               placeholder="Enter your username"
+                               required
+                               autofocus>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-bold">
+                            <i class="bi bi-key-fill"></i> Password
+                        </label>
+                        <input type="password" 
+                               class="form-control form-control-lg" 
+                               id="password" 
+                               name="password"
+                               placeholder="Enter your password"
+                               required>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </button>
+                        <a href="{{ url_for('register') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-person-plus"></i> Create New Account
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Default Credentials Info -->
+                <div class="alert alert-info mt-4 mb-0">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-info-circle"></i> Demo Credentials
+                    </h6>
+                    <small>
+                        <strong>Admin:</strong> username: admin, password: admin123<br>
+                        <strong>User:</strong> Register a new account or use demo users
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Features -->
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body">
+                <h6 class="text-primary">
+                    <i class="bi bi-shield-check"></i> Security Features
+                </h6>
+                <ul class="small mb-0">
+                    <li>Password hashing with PBKDF2-SHA256</li>
+                    <li>Secure session management</li>
+                    <li>Encrypted key storage</li>
+                    <li>Role-based access control</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+    });
+</script>
+{% endblock %}

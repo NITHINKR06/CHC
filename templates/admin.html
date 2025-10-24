@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - CHC Secure Cloud Storage{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- Admin Header -->
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                </h4>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1">Total Users</h6>
+                                <h2 class="mb-0">{{ stats.total_users }}</h2>
+                            </div>
+                            <i class="bi bi-people-fill fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1">Total Files</h6>
+                                <h2 class="mb-0">{{ stats.total_files }}</h2>
+                            </div>
+                            <i class="bi bi-file-earmark-lock-fill fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1">Storage Used</h6>
+                                <h2 class="mb-0">{{ stats.storage_mb }} MB</h2>
+                            </div>
+                            <i class="bi bi-hdd-fill fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1">Blockchain Blocks</h6>
+                                <h2 class="mb-0">{{ stats.blockchain_blocks }}</h2>
+                            </div>
+                            <i class="bi bi-diagram-3-fill fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-secondary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-people"></i> User Management
+                    </h5>
+                    <button class="btn btn-light btn-sm" onclick="refreshUsers()">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                                <th>Files Uploaded</th>
+                                <th>Files Accessible</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>
+                                    <i class="bi bi-person-circle"></i>
+                                    <strong>{{ user.username }}</strong>
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.role == 'admin' %}
+                                        <span class="badge bg-danger">Admin</span>
+                                    {% else %}
+                                        <span class="badge bg-primary">User</span>
+                                    {% endif %}
+                                </td>
+                                <td><small>{{ user.created_at }}</small></td>
+                                <td class="text-center">{{ user.files_uploaded }}</td>
+                                <td class="text-center">{{ user.files_accessible }}</td>
+                                <td class="text-center">
+                                    {% if user.username != 'admin' %}
+                                        <button class="btn btn-sm btn-outline-danger" 
+                                                onclick="deleteUser('{{ user.username }}')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% else %}
+                                        <span class="text-muted">Protected</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Storage Management -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-hdd"></i> Storage Details
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Storage by Directory:</h6>
+                        <ul class="list-group">
+                            {% for dir_name, dir_stats in storage.storage_by_directory.items() %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <i class="bi bi-folder-fill"></i> {{ dir_name }}
+                                </span>
+                                <div>
+                                    <span class="badge bg-primary">{{ dir_stats.files }} files</span>
+                                    <span class="badge bg-secondary">{{ dir_stats.size_mb }} MB</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <div class="mt-3">
+                            <h6>Total Storage:</h6>
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {{ (storage.total_size_mb / 1000 * 100)|int }}%">
+                                    {{ storage.total_size_mb }} MB / 1000 MB
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-gear"></i> System Actions
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="createBackup()">
+                                <i class="bi bi-cloud-download"></i> Create Backup
+                            </button>
+                            <button class="btn btn-primary" onclick="viewBackups()">
+                                <i class="bi bi-archive"></i> View Backups
+                            </button>
+                            <button class="btn btn-warning" onclick="cleanupOldFiles()">
+                                <i class="bi bi-trash3"></i> Cleanup Old Files (30+ days)
+                            </button>
+                            <button class="btn btn-info" onclick="verifyBlockchain()">
+                                <i class="bi bi-shield-check"></i> Verify Blockchain Integrity
+                            </button>
+                            <button class="btn btn-danger" onclick="viewLogs()">
+                                <i class="bi bi-file-text"></i> View System Logs
+                            </button>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-3 mb-0">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <strong>Caution:</strong> System actions may affect data availability
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Visualization -->
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-graph-up"></i> Data Flow Visualization
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center p-4">
+                    <h6>CHC System Data Flow</h6>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <!-- User -->
+                        <div class="text-center mx-3">
+                            <div class="bg-primary text-white rounded-circle p-3 mb-2" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-person-fill fs-3"></i>
+                            </div>
+                            <small>User</small>
+                        </div>
+                        
+                        <i class="bi bi-arrow-right fs-3 text-muted"></i>
+                        
+                        <!-- Authentication -->
+                        <div class="text-center mx-3">
+                            <div class="bg-success text-white rounded-circle p-3 mb-2" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-shield-lock fs-3"></i>
+                            </div>
+                            <small>Auth</small>
+                        </div>
+                        
+                        <i class="bi bi-arrow-right fs-3 text-muted"></i>
+                        
+                        <!-- Encryption -->
+                        <div class="text-center mx-3">
+                            <div class="bg-warning text-white rounded-circle p-3 mb-2" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-lock-fill fs-3"></i>
+                            </div>
+                            <small>CHC</small>
+                        </div>
+                        
+                        <i class="bi bi-arrow-right fs-3 text-muted"></i>
+                        
+                        <!-- Blockchain -->
+                        <div class="text-center mx-3">
+                            <div class="bg-info text-white rounded-circle p-3 mb-2" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-diagram-3 fs-3"></i>
+                            </div>
+                            <small>Blockchain</small>
+                        </div>
+                        
+                        <i class="bi bi-arrow-right fs-3 text-muted"></i>
+                        
+                        <!-- Storage -->
+                        <div class="text-center mx-3">
+                            <div class="bg-danger text-white rounded-circle p-3 mb-2" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-hdd-fill fs-3"></i>
+                            </div>
+                            <small>Storage</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>Security Layers:</h6>
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <i class="bi bi-person-badge fs-1 text-primary"></i>
+                                <h6 class="mt-2">User Auth</h6>
+                                <small>PBKDF2-SHA256</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <i class="bi bi-key fs-1 text-success"></i>
+                                <h6 class="mt-2">Key Vault</h6>
+                                <small>Fernet Encryption</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <i class="bi bi-shield-check fs-1 text-warning"></i>
+                                <h6 class="mt-2">CHC Cipher</h6>
+                                <small>HMAC Chain</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <i class="bi bi-link-45deg fs-1 text-info"></i>
+                                <h6 class="mt-2">Blockchain</h6>
+                                <small>SHA-256 Hash</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function deleteUser(username) {
+    if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+        fetch(`/admin/delete_user/${username}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('User deleted successfully');
+                location.reload();
+            } else {
+                alert('Failed to delete user: ' + data.message);
+            }
+        });
+    }
+}
+
+function createBackup() {
+    if (confirm('Create a backup of all data?')) {
+        fetch('/admin/backup', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Backup created: ' + data.backup_name);
+        });
+    }
+}
+
+function cleanupOldFiles() {
+    if (confirm('Remove files older than 30 days?')) {
+        fetch('/admin/cleanup', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(`Cleaned up ${data.deleted_count} old files`);
+        });
+    }
+}
+
+function verifyBlockchain() {
+    fetch('/admin/verify_blockchain')
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid) {
+                alert('✅ Blockchain integrity verified - Chain is valid');
+            } else {
+                alert('❌ Blockchain integrity check failed!');
+            }
+        });
+}
+
+function refreshUsers() {
+    location.reload();
+}
+
+function viewLogs() {
+    window.open('/admin/logs', '_blank');
+}
+
+function viewBackups() {
+    window.open('/admin/backups', '_blank');
+}
+</script>
+{% endblock %}
