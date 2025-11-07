@@ -6,23 +6,23 @@
 <div class="row">
     <div class="col-12">
         <!-- Blockchain Header Card -->
-        <div class="card shadow-lg border-0 mb-4">
-            <div class="card-header bg-primary text-white">
+        <div class="card shadow-modern fade-in mb-4">
+            <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
-                        <i class="bi bi-diagram-3-fill"></i> Blockchain Ledger
+                        <i class="bi bi-diagram-3-fill me-2"></i>Blockchain Ledger
                     </h4>
                     <div>
                         <span class="badge bg-light text-dark me-2">
-                            <i class="bi bi-link-45deg"></i> {{ chain_length }} Blocks
+                            <i class="bi bi-link-45deg me-1"></i>{{ chain_length }} Blocks
                         </span>
                         {% if is_valid %}
                             <span class="badge bg-success">
-                                <i class="bi bi-check-circle-fill"></i> Chain Valid
+                                <i class="bi bi-check-circle-fill me-1"></i>Chain Valid
                             </span>
                         {% else %}
                             <span class="badge bg-danger">
-                                <i class="bi bi-x-circle-fill"></i> Chain Invalid
+                                <i class="bi bi-x-circle-fill me-1"></i>Chain Invalid
                             </span>
                         {% endif %}
                     </div>
@@ -122,9 +122,9 @@
 
         <!-- Blockchain Visualization -->
         {% if chain and chain|length > 1 %}
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-dark text-white">
-                <h5 class="mb-0"><i class="bi bi-diagram-2"></i> Chain Visualization</h5>
+        <div class="card shadow-modern fade-in mb-4" style="animation-delay: 0.1s;">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-diagram-2 me-2"></i>Chain Visualization</h5>
             </div>
             <div class="card-body">
                 <div class="d-flex align-items-center overflow-auto pb-3">
@@ -158,10 +158,10 @@
 
         <!-- Blockchain Properties -->
         <div class="row">
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-shield-check"></i> Security Properties</h5>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-modern fade-in" style="animation-delay: 0.2s;">
+                    <div class="card-header bg-success">
+                        <h5 class="mb-0"><i class="bi bi-shield-check me-2"></i>Security Properties</h5>
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled">
@@ -185,10 +185,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="bi bi-info-circle"></i> Blockchain Details</h5>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-modern fade-in" style="animation-delay: 0.3s;">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Blockchain Details</h5>
                     </div>
                     <div class="card-body">
                         <dl class="row mb-0">
@@ -216,11 +216,11 @@
         </div>
 
         <!-- Raw JSON View -->
-        <div class="card border-0 shadow-sm mt-4">
-            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="bi bi-code-slash"></i> Raw Blockchain Data</h5>
+        <div class="card shadow-modern fade-in mt-4" style="animation-delay: 0.4s;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-code-slash me-2"></i>Raw Blockchain Data</h5>
                 <button class="btn btn-light btn-sm" onclick="toggleRawData()">
-                    <i class="bi bi-eye"></i> Toggle View
+                    <i class="bi bi-eye me-1"></i>Toggle View
                 </button>
             </div>
             <div class="card-body" id="rawDataContainer" style="display: none;">

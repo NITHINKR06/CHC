@@ -3,25 +3,26 @@
 {% block title %}Login - CHC Secure Cloud Storage{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-5">
-        <div class="card shadow-lg border-0">
-            <div class="card-header bg-primary text-white text-center">
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="card shadow-modern fade-in">
+            <div class="card-header">
                 <h4 class="mb-0">
-                    <i class="bi bi-person-lock"></i> User Login
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login to Your Account
                 </h4>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body">
                 <form method="POST" id="loginForm">
                     <!-- Username -->
-                    <div class="mb-3">
-                        <label for="username" class="form-label fw-bold">
-                            <i class="bi bi-person-fill"></i> Username
+                    <div class="mb-4">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person-fill me-2 text-primary"></i>Username 
+                            <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control form-control-lg" 
                                id="username" 
-                               name="username"
+                               name="username" 
                                placeholder="Enter your username"
                                required
                                autofocus>
@@ -29,8 +30,9 @@
 
                     <!-- Password -->
                     <div class="mb-4">
-                        <label for="password" class="form-label fw-bold">
-                            <i class="bi bi-key-fill"></i> Password
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock-fill me-2 text-primary"></i>Password 
+                            <span class="text-danger">*</span>
                         </label>
                         <input type="password" 
                                class="form-control form-control-lg" 
@@ -40,50 +42,37 @@
                                required>
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="form-check mb-4">
-                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">
-                            Remember me
-                        </label>
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg" id="loginBtn">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
                     </div>
 
-                    <!-- Submit Button -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-box-arrow-in-right"></i> Login
-                        </button>
-                        <a href="{{ url_for('register') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-person-plus"></i> Create New Account
-                        </a>
+                    <!-- Register Link -->
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            Don't have an account? 
+                            <a href="{{ url_for('register') }}" class="text-primary fw-bold">Register here</a>
+                        </p>
                     </div>
                 </form>
-
-                <!-- Default Credentials Info -->
-                <div class="alert alert-info mt-4 mb-0">
-                    <h6 class="alert-heading">
-                        <i class="bi bi-info-circle"></i> Demo Credentials
-                    </h6>
-                    <small>
-                        <strong>Admin:</strong> username: admin, password: admin123<br>
-                        <strong>User:</strong> Register a new account or use demo users
-                    </small>
-                </div>
             </div>
         </div>
 
-        <!-- Security Features -->
-        <div class="card border-0 shadow-sm mt-4">
+        <!-- Info Card -->
+        <div class="card shadow-modern mt-4 fade-in" style="animation-delay: 0.2s;">
             <div class="card-body">
-                <h6 class="text-primary">
-                    <i class="bi bi-shield-check"></i> Security Features
-                </h6>
-                <ul class="small mb-0">
-                    <li>Password hashing with PBKDF2-SHA256</li>
-                    <li>Secure session management</li>
-                    <li>Encrypted key storage</li>
-                    <li>Role-based access control</li>
-                </ul>
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-info-circle-fill text-info me-2"></i>Default Admin Account
+                </h5>
+                <p class="text-muted mb-0">
+                    <strong>Username:</strong> admin<br>
+                    <strong>Password:</strong> admin123
+                </p>
+                <small class="text-danger">
+                    <i class="bi bi-exclamation-triangle me-1"></i>Please change the default password after first login!
+                </small>
             </div>
         </div>
     </div>
@@ -92,10 +81,21 @@
 
 {% block scripts %}
 <script>
+    // Form submission handling
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+        const loginBtn = document.getElementById('loginBtn');
+        const originalText = loginBtn.innerHTML;
+        
+        // Show loading state
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+        
+        // Re-enable after a timeout (in case of error)
+        setTimeout(function() {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = originalText;
+        }, 5000);
     });
 </script>
 {% endblock %}
+

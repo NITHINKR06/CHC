@@ -22,7 +22,7 @@ This project implements a **secure cloud storage system** that combines:
 
 ## 🏗️ System Architecture
 
-![System Architecture Diagram](diagram-export-10-9-2025-11_42_33-PM.png)
+![System Architecture Diagram](static/flowchart.png)
 
 The system implements a **7-step secure file management flow**:
 

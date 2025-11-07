@@ -14,51 +14,70 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <nav class="navbar navbar-expand-lg navbar-modern shadow-lg">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
-                <i class="bi bi-shield-lock-fill"></i> CHC Cloud Storage
+            <a class="navbar-brand fw-bold brand-gradient" href="{{ url_for('index') }}">
+                <i class="bi bi-shield-lock-fill me-2"></i> CHC Cloud Storage
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
-                            <i class="bi bi-house-door"></i> Home
+                            <i class="bi bi-house-door me-1"></i> Home
                         </a>
                     </li>
+                    {% if current_user %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'upload' %}active{% endif %}" href="{{ url_for('upload') }}">
-                            <i class="bi bi-cloud-upload"></i> Upload
+                            <i class="bi bi-cloud-upload me-1"></i> Upload
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'files' %}active{% endif %}" href="{{ url_for('files') }}">
-                            <i class="bi bi-file-earmark-lock"></i> Files
+                            <i class="bi bi-file-earmark-lock me-1"></i> Files
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'blockchain_view' %}active{% endif %}" href="{{ url_for('blockchain_view') }}">
-                            <i class="bi bi-diagram-3"></i> Blockchain
+                            <i class="bi bi-diagram-3 me-1"></i> Blockchain
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i> {{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><span class="dropdown-item-text">
+                                <i class="bi bi-envelope me-2"></i>{{ current_user.email }}
+                            </span></li>
+                            <li><span class="dropdown-item-text">
+                                <i class="bi bi-shield-check me-2"></i>Role: {{ current_user.role|title }}
+                            </span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'login' %}active{% endif %}" href="{{ url_for('login') }}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'register' %}active{% endif %}" href="{{ url_for('register') }}">
+                            <i class="bi bi-person-plus me-1"></i> Register
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
-
-    <!-- Header -->
-    <div class="bg-light py-3 border-bottom">
-        <div class="container">
-            <h1 class="h4 mb-0 text-primary">
-                <i class="bi bi-lock-fill"></i> 
-                CHC – Contextual Encryption for Secure Cloud Storage
-            </h1>
-            <small class="text-muted">Blockchain-linked encryption for maximum security</small>
-        </div>
-    </div>
 
     <!-- Flash Messages -->
     <div class="container mt-3">
@@ -84,16 +103,16 @@
     </div>
 
     <!-- Main Content -->
-    <main class="container my-4">
+    <main class="container my-5">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">
-                <i class="bi bi-shield-check"></i> 
-                CHC Secure Cloud Storage - Academic Demonstration
+    <footer class="footer-modern mt-auto">
+        <div class="container text-center py-4">
+            <p class="mb-2">
+                <i class="bi bi-shield-check me-2"></i> 
+                <strong>CHC Secure Cloud Storage</strong> - Academic Demonstration
             </p>
             <small class="text-muted">
                 Contextual Hash Chain Encryption with Blockchain Integration

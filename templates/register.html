@@ -3,115 +3,103 @@
 {% block title %}Register - CHC Secure Cloud Storage{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-6">
-        <div class="card shadow-lg border-0">
-            <div class="card-header bg-success text-white text-center">
+<div class="row">
+    <div class="col-lg-6 mx-auto">
+        <div class="card shadow-modern fade-in">
+            <div class="card-header">
                 <h4 class="mb-0">
-                    <i class="bi bi-person-plus-fill"></i> Create Account
+                    <i class="bi bi-person-plus me-2"></i>Create New Account
                 </h4>
             </div>
-            <div class="card-body p-4">
+            <div class="card-body">
                 <form method="POST" id="registerForm">
                     <!-- Username -->
-                    <div class="mb-3">
-                        <label for="username" class="form-label fw-bold">
-                            <i class="bi bi-person-fill"></i> Username
+                    <div class="mb-4">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person-fill me-2 text-primary"></i>Username 
                             <span class="text-danger">*</span>
                         </label>
                         <input type="text" 
                                class="form-control form-control-lg" 
                                id="username" 
-                               name="username"
-                               placeholder="Choose a unique username"
-                               pattern="[a-zA-Z0-9_]{3,20}"
-                               title="3-20 characters, letters, numbers, and underscore only"
-                               required>
-                        <small class="form-text text-muted">
-                            3-20 characters, letters, numbers, and underscore only
+                               name="username" 
+                               placeholder="Choose a username"
+                               required
+                               autofocus>
+                        <small class="form-text text-muted mt-2">
+                            <i class="bi bi-info-circle me-1"></i>This will be used to identify you as the file owner
                         </small>
                     </div>
 
                     <!-- Email -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">
-                            <i class="bi bi-envelope-fill"></i> Email Address
+                    <div class="mb-4">
+                        <label for="email" class="form-label">
+                            <i class="bi bi-envelope-fill me-2 text-primary"></i>Email 
                             <span class="text-danger">*</span>
                         </label>
                         <input type="email" 
                                class="form-control form-control-lg" 
                                id="email" 
                                name="email"
-                               placeholder="your.email@example.com"
+                               placeholder="Enter your email"
                                required>
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">
-                            <i class="bi bi-key-fill"></i> Password
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock-fill me-2 text-primary"></i>Password 
                             <span class="text-danger">*</span>
                         </label>
                         <input type="password" 
                                class="form-control form-control-lg" 
                                id="password" 
                                name="password"
-                               placeholder="Choose a strong password"
-                               minlength="6"
-                               required>
-                        <small class="form-text text-muted">
-                            Minimum 6 characters
+                               placeholder="Choose a password (min 6 characters)"
+                               required
+                               minlength="6">
+                        <small class="form-text text-muted mt-2">
+                            <i class="bi bi-shield-check me-1"></i>Password must be at least 6 characters long
                         </small>
                     </div>
 
-                    <!-- Confirm Password -->
-                    <div class="mb-4">
-                        <label for="confirm_password" class="form-label fw-bold">
-                            <i class="bi bi-key-fill"></i> Confirm Password
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="password" 
-                               class="form-control form-control-lg" 
-                               id="confirm_password" 
-                               name="confirm_password"
-                               placeholder="Re-enter your password"
-                               minlength="6"
-                               required>
-                    </div>
-
-                    <!-- Terms -->
-                    <div class="form-check mb-4">
-                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
-                        <label class="form-check-label" for="terms">
-                            I agree to the terms and conditions
-                        </label>
-                    </div>
-
                     <!-- Submit Button -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            <i class="bi bi-person-plus"></i> Create Account
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg" id="registerBtn">
+                            <i class="bi bi-person-plus me-2"></i>Register
                         </button>
-                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left"></i> Back to Login
-                        </a>
+                    </div>
+
+                    <!-- Login Link -->
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            Already have an account? 
+                            <a href="{{ url_for('login') }}" class="text-primary fw-bold">Login here</a>
+                        </p>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Account Benefits -->
-        <div class="card border-0 shadow-sm mt-4">
+        <!-- Security Notice -->
+        <div class="card shadow-modern mt-4 fade-in" style="animation-delay: 0.2s;">
             <div class="card-body">
-                <h6 class="text-success">
-                    <i class="bi bi-check-circle"></i> Account Benefits
-                </h6>
-                <ul class="small mb-0">
-                    <li>Secure file encryption with personal keys</li>
-                    <li>Share files with other users</li>
-                    <li>Track your uploaded files</li>
-                    <li>Access control management</li>
-                    <li>Blockchain audit trail</li>
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-shield-check-fill text-success me-2"></i>Security Features
+                </h5>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Secure Password Storage:</strong> Passwords are hashed using PBKDF2-SHA256
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Session Management:</strong> Secure session tokens for authentication
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <strong>Access Control:</strong> Only authorized users can decrypt files
+                    </li>
                 </ul>
             </div>
         </div>
@@ -121,23 +109,29 @@
 
 {% block scripts %}
 <script>
+    // Form submission handling
     document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+        const registerBtn = document.getElementById('registerBtn');
+        const originalText = registerBtn.innerHTML;
         
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
+        // Show loading state
+        registerBtn.disabled = true;
+        registerBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registering...';
         
-        if (password !== confirmPassword) {
-            alert('Passwords do not match!');
-            return false;
-        }
+        // Re-enable after a timeout (in case of error)
+        setTimeout(function() {
+            registerBtn.disabled = false;
+            registerBtn.innerHTML = originalText;
+        }, 5000);
+    });
+
+    // Password strength indicator
+    document.getElementById('password').addEventListener('input', function(e) {
+        const password = e.target.value;
+        const strength = password.length >= 6 ? 'strong' : 'weak';
         
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating Account...';
-        
-        // Submit form
-        this.submit();
+        // You can add visual feedback here if needed
     });
 </script>
 {% endblock %}
+
