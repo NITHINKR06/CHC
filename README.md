@@ -87,7 +87,6 @@ The system implements a **7-step secure file management flow**:
 
 4. **Access the web interface**
    - Open browser: `http://127.0.0.1:5000`
-   - Default admin: `admin` / `admin123`
 
 ## 📋 How to Use
 
@@ -271,7 +270,6 @@ python -c "from data_manager import DataManager; DataManager().create_backup()"
 - **Files** (`/files`) - File management and listing
 - **Blockchain** (`/blockchain`) - Blockchain viewer
 - **Security** (`/security/<file_id>`) - Security audit trail
-- **Admin** (`/admin`) - System administration
 
 ### Key Features
 - **Real-time Feedback**: Live updates on all operations
